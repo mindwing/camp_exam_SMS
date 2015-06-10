@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 public class SmsConversationAdapter extends
 		RecyclerView.Adapter<SmsConversationViewHolder> {
@@ -25,6 +24,7 @@ public class SmsConversationAdapter extends
 
 	@Override
 	public void onBindViewHolder(SmsConversationViewHolder holder, int position) {
+		holder.updateContent(conversationList.get(position));
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import kr.mindwing.camp_exam_sms.lib.ConversationInfo;
 import kr.mindwing.camp_exam_sms.lib.SmsUtil;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 public class ContactsListActivity extends ActionBarActivity {
@@ -19,9 +20,16 @@ public class ContactsListActivity extends ActionBarActivity {
 
 		setContentView(R.layout.activity_contacts_list);
 
-		SmsUtil.checkDefaultSmsApp(this);
+		conversationList = SmsUtil.getConversationInfoList(this);
 
 		recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+		recyclerView.setAdapter(new SmsConversationAdapter(conversationList));
+
+		RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(
+				this);
+		recyclerView.setLayoutManager(rvLayoutManager);
+
+		SmsUtil.checkDefaultSmsApp(this);
 
 		// AddressInfo addrInfo = conversationList.get(0).getAddressInfo();
 		// ArrayList<MessageData> messageList = SmsUtil.getConversation(
@@ -32,8 +40,5 @@ public class ContactsListActivity extends ActionBarActivity {
 	protected void onResume() {
 		super.onResume();
 
-		conversationList = SmsUtil.getConversationInfoList(this);
-
-		recyclerView.setAdapter(new SmsConversationAdapter(conversationList));
 	}
 }
