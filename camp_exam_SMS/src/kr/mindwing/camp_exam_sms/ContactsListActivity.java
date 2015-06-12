@@ -26,7 +26,7 @@ public class ContactsListActivity extends ActionBarActivity {
 		recyclerView.setAdapter(new SmsConversationAdapter(conversationList));
 
 		RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(
-				this);
+				this, LinearLayoutManager.VERTICAL, false);
 		recyclerView.setLayoutManager(rvLayoutManager);
 
 		SmsUtil.checkDefaultSmsApp(this);
