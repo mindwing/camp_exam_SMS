@@ -29,7 +29,7 @@ public class ContactsListActivity extends ActionBarActivity {
 				this, LinearLayoutManager.VERTICAL, false);
 		recyclerView.setLayoutManager(rvLayoutManager);
 
-		SmsUtil.checkDefaultSmsApp(this);
+		// SmsUtil.checkDefaultSmsApp(this);
 
 		// AddressInfo addrInfo = conversationList.get(0).getAddressInfo();
 		// ArrayList<MessageData> messageList = SmsUtil.getConversation(
