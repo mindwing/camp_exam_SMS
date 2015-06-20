@@ -56,6 +56,8 @@ public class SmsUtil {
 	private static final Uri CONTENT_URI_MMS_SMS_THREAD_ID = Uri
 			.parse("content://mms-sms/threadID");
 
+	public static final String ADDRESS_INFO = "ADDRESS_INFO";
+
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	public static void checkDefaultSmsApp(Context context) {
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
