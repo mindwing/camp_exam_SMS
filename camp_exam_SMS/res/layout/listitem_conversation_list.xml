@@ -22,11 +22,4 @@
         android:text="snippet"
         android:textSize="15dp" />
 
-    <VideoView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_below="@id/snippet"
-        android:layout_marginTop="15dp"
-        android:background="#2f2f2f" />
-
 </RelativeLayout>
