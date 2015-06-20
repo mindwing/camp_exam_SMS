@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:text="address"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/snippet"
@@ -20,6 +21,15 @@
         android:layout_below="@id/address"
         android:singleLine="true"
         android:text="snippet"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/snippet"
+        android:singleLine="true"
+        android:text="date"
         android:textSize="15dp" />
 
 </RelativeLayout>

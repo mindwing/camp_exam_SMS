@@ -1,6 +1,8 @@
 package kr.mindwing.camp_exam_sms.lib;
 
 import android.content.Context;
+import android.telephony.PhoneNumberUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -125,7 +127,7 @@ public class AddressInfo {
 		String retVal = "";
 
 		for (Iterator<String> iter = mAddressSet.iterator(); iter.hasNext();) {
-			retVal += iter.next();
+			retVal += PhoneNumberUtils.formatNumber(iter.next());
 			retVal += " ";
 		}
 
