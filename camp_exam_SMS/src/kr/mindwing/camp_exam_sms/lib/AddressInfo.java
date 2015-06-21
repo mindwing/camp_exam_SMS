@@ -17,7 +17,7 @@ public class AddressInfo {
 
 	private HashMap<String, ArrayList<String>> mAddressNameListMap = new HashMap<String, ArrayList<String>>();
 
-	private String mSpaceSeparatedExpression;
+	private String mSpaceSeparatedExpression, mSpaceSeparatedNameExpression;
 
 	public static ArrayList<AddressInfo> getFilteredAddressInfoList(
 			ArrayList<AddressInfo> source, String _partialAddressName) {
@@ -127,11 +127,43 @@ public class AddressInfo {
 		String retVal = "";
 
 		for (Iterator<String> iter = mAddressSet.iterator(); iter.hasNext();) {
-			retVal += PhoneNumberUtils.formatNumber(iter.next());
+			String address = iter.next();
+
+			if (address != null) {
+				retVal += PhoneNumberUtils.formatNumber(address);
+			}
+
 			retVal += " ";
 		}
 
 		return mSpaceSeparatedExpression = retVal.trim();
+	}
+
+	public String getSpaceSeparatedNameExpression() {
+		if (mSpaceSeparatedNameExpression != null) {
+			return mSpaceSeparatedNameExpression;
+		}
+
+		String retVal = "";
+
+		for (Iterator<String> iter = mAddressSet.iterator(); iter.hasNext();) {
+			String address = iter.next();
+			ArrayList<String> names = getAddressName(address);
+
+			if (names != null) {
+				retVal += names.get(0);
+				retVal += " ";
+			} else if (!"".equals(address)) {
+				retVal += PhoneNumberUtils.formatNumber(address);
+				retVal += " ";
+			}
+		}
+
+		if (retVal == "") {
+			retVal = "발신번호없음";
+		}
+
+		return mSpaceSeparatedNameExpression = retVal.trim();
 	}
 
 	public String getChainExpression() {
@@ -170,6 +202,6 @@ public class AddressInfo {
 
 	@Override
 	public String toString() {
-		return getSpaceSeparatedExpression();
+		return getSpaceSeparatedNameExpression();
 	}
 }

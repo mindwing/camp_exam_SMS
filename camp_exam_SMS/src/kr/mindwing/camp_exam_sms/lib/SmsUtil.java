@@ -56,7 +56,8 @@ public class SmsUtil {
 	private static final Uri CONTENT_URI_MMS_SMS_THREAD_ID = Uri
 			.parse("content://mms-sms/threadID");
 
-	public static final String ADDRESS_INFO = "ADDRESS_INFO";
+	public static final String ADDRESSES = "ADDRESS_INFO";
+	public static final String THREAD_ID = "THREAD_ID";
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	public static void checkDefaultSmsApp(Context context) {
@@ -127,6 +128,8 @@ public class SmsUtil {
 
 	private static synchronized AddressInfo retrieveAddressesByIds(
 			Context _ctx, AddressInfo address, String _addrs) {
+		String addressFromDb = null;
+
 		for (StringTokenizer st = new StringTokenizer(_addrs); st
 				.hasMoreTokens();) {
 			Cursor addrCursor = _ctx.getContentResolver().query(
@@ -135,12 +138,12 @@ public class SmsUtil {
 
 			if (addrCursor != null && addrCursor.getCount() > 0) {
 				addrCursor.moveToFirst();
-				String addressFromDb = addrCursor.getString(0);
+				addressFromDb = addrCursor.getString(0);
 				address.addAddress(addressFromDb);
 				if (addressFromDb != null && addressFromDb.length() > 0) {
 					ArrayList<String> addressName = getAddressName(_ctx,
 							addressFromDb);
-					if (addressName != null) {
+					if (addressName != null && addressName.size() != 0) {
 						address.setAddressName(addressFromDb, addressName);
 					}
 				}

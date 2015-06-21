@@ -2,6 +2,7 @@ package kr.mindwing.camp_exam_sms;
 
 import java.util.ArrayList;
 
+import kr.mindwing.camp_exam_sms.lib.AddressInfo;
 import kr.mindwing.camp_exam_sms.lib.ConversationInfo;
 import kr.mindwing.camp_exam_sms.lib.SmsUtil;
 import android.content.Intent;
@@ -33,8 +34,11 @@ class SmsConversationInfosViewHolder extends RecyclerView.ViewHolder {
 				int itemPosition = getAdapterPosition();
 				ConversationInfo convInfo = conversationList.get(itemPosition);
 
-				viewConversationIntent.putExtra(SmsUtil.ADDRESS_INFO, convInfo
-						.getAddressInfo().getSpaceSeparatedExpression());
+				AddressInfo addressInfo = convInfo.getAddressInfo();
+				viewConversationIntent.putExtra(SmsUtil.THREAD_ID,
+						addressInfo.getThreadId());
+				viewConversationIntent.putExtra(SmsUtil.ADDRESSES,
+						addressInfo.getSpaceSeparatedExpression());
 
 				v.getContext().startActivity(viewConversationIntent);
 			}
@@ -47,9 +51,8 @@ class SmsConversationInfosViewHolder extends RecyclerView.ViewHolder {
 
 	public void updateContent(ConversationInfo conversationInfo) {
 		tvAddress.setText(conversationInfo.getAddressInfo()
-				.getChainExpression());
+				.getSpaceSeparatedNameExpression());
 		tvSnippet.setText(conversationInfo.getSnippet());
 		tvDate.setText(conversationInfo.getDateString());
 	}
-
 }

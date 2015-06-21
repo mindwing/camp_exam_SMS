@@ -20,8 +20,9 @@ public class ConversationActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_conversation);
 
-		String address = getIntent().getStringExtra(SmsUtil.ADDRESS_INFO);
-		AddressInfo addressInfo = new AddressInfo(this, address);
+		String threadId = getIntent().getStringExtra(SmsUtil.THREAD_ID);
+		String addresses = getIntent().getStringExtra(SmsUtil.ADDRESSES);
+		AddressInfo addressInfo = new AddressInfo(addresses, threadId);
 
 		conversationList = SmsUtil.getConversation(this, addressInfo);
 
