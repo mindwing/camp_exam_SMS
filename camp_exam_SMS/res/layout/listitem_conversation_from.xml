@@ -5,12 +5,20 @@
     android:background="#d2d5d1"
     android:padding="5dp" >
 
-    <TextView
-        android:id="@+id/conversation"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:text="받은 대화"
-        android:textSize="20dp" />
+        android:layout_marginRight="20dp"
+        android:background="@drawable/message_received"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/conversation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="안녕하세요. 오늘 저녁 식사 어떠세요? 괜찮으시면 7시에 가겠습니다."
+            android:textSize="15dp" />
+    </LinearLayout>
 
 </RelativeLayout>

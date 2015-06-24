@@ -5,13 +5,21 @@
     android:background="#d2d5d1"
     android:padding="5dp" >
 
-    <TextView
-        android:id="@+id/conversation"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:singleLine="true"
-        android:text="보낸 대화"
-        android:textSize="20dp" />
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/message_sent"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/conversation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="네. 시간괜찮아요. 기다리고 있을께요."
+            android:textSize="15dp" />
+    </LinearLayout>
 
 </RelativeLayout>

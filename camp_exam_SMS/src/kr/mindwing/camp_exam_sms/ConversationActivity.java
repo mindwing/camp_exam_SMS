@@ -24,6 +24,8 @@ public class ConversationActivity extends ActionBarActivity {
 		String addresses = getIntent().getStringExtra(SmsUtil.ADDRESSES);
 		AddressInfo addressInfo = new AddressInfo(addresses, threadId);
 
+		setTitle(addresses);
+
 		conversationList = SmsUtil.getConversation(this, addressInfo);
 
 		recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
