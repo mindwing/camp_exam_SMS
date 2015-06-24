@@ -293,10 +293,15 @@ public class SmsUtil {
 			AddressInfo _addressInfo) {
 		ArrayList<MessageData> dataList = new ArrayList<MessageData>();
 
+		String threadId = _addressInfo.getThreadId();
+
+		if (Integer.parseInt(threadId) < 1) {
+			return dataList;
+		}
+
 		Cursor msgCursor = _ctx.getContentResolver().query(
-				Uri.withAppendedPath(CONTENT_CONVERSATIONS_URI,
-						_addressInfo.getThreadId()), PROJ_CONVERSATION, null,
-				null, null);
+				Uri.withAppendedPath(CONTENT_CONVERSATIONS_URI, threadId),
+				PROJ_CONVERSATION, null, null, null);
 
 		if (msgCursor == null) {
 			return dataList;
