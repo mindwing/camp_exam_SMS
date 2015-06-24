@@ -19,6 +19,15 @@
             android:layout_height="wrap_content"
             android:text="안녕하세요. 오늘 저녁 식사 어떠세요? 괜찮으시면 7시에 가겠습니다."
             android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="01/25 00:25:01"
+            android:textColor="#7f7f7f"
+            android:textSize="12dp" />
     </LinearLayout>
 
 </RelativeLayout>

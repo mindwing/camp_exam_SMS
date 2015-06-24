@@ -28,7 +28,7 @@ public class ConversationInfo {
 		}
 
 		mDate = _date;
-		dateString = DateFormat.format("MM/dd HH:mm", _date);
+		dateString = SmsUtil.getDateString(_date);
 
 		mTotalMessageCount = _totalMessageCount;
 	}

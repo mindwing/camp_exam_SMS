@@ -20,6 +20,15 @@
             android:layout_height="wrap_content"
             android:text="네. 시간괜찮아요. 기다리고 있을께요."
             android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="01/25 00:25:01"
+            android:textColor="#7f7f7f"
+            android:textSize="12dp" />
     </LinearLayout>
 
 </RelativeLayout>

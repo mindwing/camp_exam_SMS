@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.Telephony;
+import android.text.format.DateFormat;
 
 public class SmsUtil {
 
@@ -315,5 +316,9 @@ public class SmsUtil {
 		msgCursor.close();
 
 		return dataList;
+	}
+
+	public static CharSequence getDateString(long _date) {
+		return DateFormat.format("MM/dd HH:mm:ss", _date);
 	}
 }

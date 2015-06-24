@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.text.format.DateFormat;
 
 public class MessageData {
 
@@ -19,6 +20,7 @@ public class MessageData {
 	private AddressInfo mAddressInfo;
 	private int mType;
 	private long mDate;
+	private CharSequence mDateString;
 	private String mBody;
 	private String mSubject;
 
@@ -30,6 +32,8 @@ public class MessageData {
 		mAddressInfo = _addressInfo;
 		mType = _type;
 		mBody = _body;
+		mDate = _date;
+		mDateString = SmsUtil.getDateString(_date);
 	}
 
 	public String getId() {
@@ -62,6 +66,10 @@ public class MessageData {
 
 	public long getDate() {
 		return mDate;
+	}
+
+	public CharSequence getDateString() {
+		return mDateString;
 	}
 
 	public String getChset() {
