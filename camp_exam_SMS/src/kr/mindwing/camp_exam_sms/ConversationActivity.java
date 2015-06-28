@@ -9,11 +9,16 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.EditText;
 
 public class ConversationActivity extends ActionBarActivity {
 
+	private AddressInfo addressInfo;
 	private RecyclerView recyclerView;
 	private ArrayList<MessageData> conversationList;
+	private EditText textInput;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +27,7 @@ public class ConversationActivity extends ActionBarActivity {
 
 		String threadId = getIntent().getStringExtra(SmsUtil.THREAD_ID);
 		String addresses = getIntent().getStringExtra(SmsUtil.ADDRESSES);
-		AddressInfo addressInfo = new AddressInfo(addresses, threadId);
+		addressInfo = new AddressInfo(addresses, threadId);
 
 		setTitle(addresses);
 
@@ -35,6 +40,15 @@ public class ConversationActivity extends ActionBarActivity {
 				this, LinearLayoutManager.VERTICAL, false);
 		recyclerView.setLayoutManager(rvLayoutManager);
 
+		textInput = (EditText) findViewById(R.id.text_input);
+		textInput.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				SmsUtil.sendSms(ConversationActivity.this, addressInfo,
+						textInput.getText().toString());
+			}
+		});
 	}
 
 	@Override

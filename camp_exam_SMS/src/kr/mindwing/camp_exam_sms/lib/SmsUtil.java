@@ -1,11 +1,13 @@
 package kr.mindwing.camp_exam_sms.lib;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import android.annotation.TargetApi;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,9 +15,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.Telephony;
+import android.telephony.SmsManager;
 import android.text.format.DateFormat;
+import android.util.Log;
 
 public class SmsUtil {
+
+	private static final String TAG = "SmsUtil";
 
 	private static final String[] PROJ_ID = new String[] { "_id" };
 
@@ -25,17 +31,25 @@ public class SmsUtil {
 	// ThreadsColumns.SNIPPET, ThreadsColumns.SNIPPET_CHARSET,
 	// ThreadsColumns.MESSAGE_COUNT }; // , "unread_message_count" };
 
-	private static final String ID = "_id";
-	private static final String DATE = "date";
-	private static final String RECIPIENT_IDS = "recipient_ids";
-	private static final String SNIPPET = "snippet";
-	private static final String SNIPPET_CHARSET = "snippet_cs";
-	private static final String MESSAGE_COUNT = "message_count";
-	private static final String TYPE = "type";
-	private static final String SUBJECT = "sub";
-	private static final String SUBJECT_CHARSET = "sub_cs";
-	private static final String BODY = "body";
-	private static final String MESSAGE_BOX = "msg_box";
+	public static final String ID = "_id";
+	public static final String DATE = "date";
+	public static final String RECIPIENT_IDS = "recipient_ids";
+	public static final String SNIPPET = "snippet";
+	public static final String SNIPPET_CHARSET = "snippet_cs";
+	public static final String MESSAGE_COUNT = "message_count";
+	public static final String TYPE = "type";
+	public static final String SUBJECT = "sub";
+	public static final String SUBJECT_CHARSET = "sub_cs";
+	public static final String BODY = "body";
+	public static final String MESSAGE_BOX = "msg_box";
+	public static final String ADDRESS = "address";
+	public static final String ADDRESSES = "address_info";
+	public static final String THREAD_ID = "thread_id";
+	public static final String DATE_SENT = "date_sent";
+	public static final String READ = "read";
+	public static final String SEEN = "seen";
+	public static final int MESSAGE_TYPE_INBOX = 1;
+	public static final int MESSAGE_TYPE_SENT = 2;
 
 	private static final String[] PROJ_CONVERSATIONS_INFO = new String[] { ID,
 			DATE, RECIPIENT_IDS, SNIPPET, SNIPPET_CHARSET, MESSAGE_COUNT };
@@ -43,22 +57,23 @@ public class SmsUtil {
 	private static final String[] PROJ_CONVERSATION = new String[] { ID, TYPE,
 			DATE, SUBJECT, SUBJECT_CHARSET, BODY, MESSAGE_BOX };
 
-	private static final Uri CONTENT_URI = Uri.parse("content://mms-sms/");
+	private static final Uri CONTENT_URI_MMS_SMS = Uri
+			.parse("content://mms-sms/");
+	private static final Uri CONTENT_URI_SMS = Uri.parse("content://sms");
 
 	private static final Uri CONTENT_URI_CANONICAL_ADDRESS = Uri
-			.withAppendedPath(/* MmsSms. */CONTENT_URI, "canonical-address");
+			.withAppendedPath(/* MmsSms. */CONTENT_URI_MMS_SMS,
+					"canonical-address");
 
 	public static final Uri CONTENT_CONVERSATIONS_URI = Uri
 			.parse("content://mms-sms/conversations");
 
 	private static final Uri CONTENT_URI_CANONICAL_ADDRESSES = Uri
-			.withAppendedPath(/* MmsSms. */CONTENT_URI, "canonical-addresses");
+			.withAppendedPath(/* MmsSms. */CONTENT_URI_MMS_SMS,
+					"canonical-addresses");
 
 	private static final Uri CONTENT_URI_MMS_SMS_THREAD_ID = Uri
 			.parse("content://mms-sms/threadID");
-
-	public static final String ADDRESSES = "ADDRESS_INFO";
-	public static final String THREAD_ID = "THREAD_ID";
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	public static void checkDefaultSmsApp(Context context) {
@@ -320,5 +335,56 @@ public class SmsUtil {
 
 	public static CharSequence getDateString(long _date) {
 		return DateFormat.format("MM/dd HH:mm:ss", _date);
+	}
+
+	public static boolean sendSms(Context _ctx, AddressInfo _addressInfo,
+			String _text) {
+		if (_text == null || _text.length() <= 0) {
+			Log.d(TAG, "sendSms: _text is null");
+
+			return false;
+		}
+
+		try {
+			if (_text == null || _text.getBytes("KSC5601").length > 80) {
+				Log.d(TAG, "sendSms: _text length is longer than 80: " + _text);
+
+				return false;
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+
+			return false;
+		}
+
+		SmsManager smsManager = SmsManager.getDefault();
+
+		String address;
+		long sentTime = System.currentTimeMillis();
+
+		for (Iterator<String> iter = _addressInfo.iterator(); iter.hasNext();) {
+			smsManager.sendTextMessage((address = iter.next()), null, _text,
+					null, null);
+
+			Log.d("sendSms", address + ": " + _text);
+		}
+
+		insertSmsToDb(_ctx, _addressInfo, _text, sentTime, false, false);
+
+		return true;
+	}
+
+	private static void insertSmsToDb(Context _ctx, AddressInfo _addressInfo,
+			String body, long date, boolean isFrom, boolean isSpam) {
+		ContentValues value = new ContentValues(7);
+		value.put(THREAD_ID, _addressInfo.getThreadId());
+		value.put(ADDRESS, _addressInfo.getChainExpression());
+		value.put(DATE, date);
+		value.put(READ, 0);
+		value.put(SEEN, 0);
+		value.put(TYPE, !isFrom ? MESSAGE_TYPE_SENT : MESSAGE_TYPE_INBOX);
+		value.put(BODY, body);
+
+		_ctx.getContentResolver().insert(CONTENT_URI_SMS, value);
 	}
 }

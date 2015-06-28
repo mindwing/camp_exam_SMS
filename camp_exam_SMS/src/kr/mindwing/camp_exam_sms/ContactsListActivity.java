@@ -23,13 +23,14 @@ public class ContactsListActivity extends ActionBarActivity {
 		conversationList = SmsUtil.getConversationInfoList(this);
 
 		recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-		recyclerView.setAdapter(new SmsConversationInfosAdapter(conversationList));
+		recyclerView.setAdapter(new SmsConversationInfosAdapter(
+				conversationList));
 
 		RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(
 				this, LinearLayoutManager.VERTICAL, false);
 		recyclerView.setLayoutManager(rvLayoutManager);
 
-		// SmsUtil.checkDefaultSmsApp(this);
+		SmsUtil.checkDefaultSmsApp(this);
 
 		// AddressInfo addrInfo = conversationList.get(0).getAddressInfo();
 		// ArrayList<MessageData> messageList = SmsUtil.getConversation(
