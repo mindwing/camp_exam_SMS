@@ -38,7 +38,9 @@
                 <data android:scheme="smsto" />
             </intent-filter>
         </activity>
-        <activity android:name=".ConversationActivity" />
+        <activity
+            android:name=".ConversationActivity"
+            android:windowSoftInputMode="stateHidden" />
 
         <receiver
             android:name="kr.mindwing.camp_exam_sms.lib.MmsReceiver"

@@ -77,11 +77,11 @@ public class SmsUtil {
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	public static void checkDefaultSmsApp(Context context) {
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+		String myPackageName = context.getPackageName();
+
+		if (isDefaultSmsApp(context, myPackageName)) {
 			return;
 		}
-
-		final String myPackageName = context.getPackageName();
 
 		if (!Telephony.Sms.getDefaultSmsPackage(context).equals(myPackageName)) {
 			Intent intent = new Intent(
@@ -90,6 +90,21 @@ public class SmsUtil {
 					myPackageName);
 			context.startActivity(intent);
 		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	public static boolean isDefaultSmsApp(Context context) {
+		return isDefaultSmsApp(context, context.getPackageName());
+	}
+
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	public static boolean isDefaultSmsApp(Context context, String myPackageName) {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+			return true;
+		}
+
+		return (Telephony.Sms.getDefaultSmsPackage(context)
+				.equals(myPackageName));
 	}
 
 	public static ArrayList<ConversationInfo> getConversationInfoList(

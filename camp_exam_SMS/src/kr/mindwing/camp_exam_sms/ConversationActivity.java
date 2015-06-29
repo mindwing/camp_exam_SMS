@@ -12,13 +12,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class ConversationActivity extends ActionBarActivity {
 
 	private AddressInfo addressInfo;
 	private RecyclerView recyclerView;
 	private ArrayList<MessageData> conversationList;
-	private EditText textInput;
+	private EditText etTextInput;
+	private TextView btSend;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +42,16 @@ public class ConversationActivity extends ActionBarActivity {
 				this, LinearLayoutManager.VERTICAL, false);
 		recyclerView.setLayoutManager(rvLayoutManager);
 
-		textInput = (EditText) findViewById(R.id.text_input);
-		textInput.setOnClickListener(new OnClickListener() {
+		etTextInput = (EditText) findViewById(R.id.text_input);
+
+		btSend = (TextView) findViewById(R.id.send);
+		btSend.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				SmsUtil.sendSms(ConversationActivity.this, addressInfo,
-						textInput.getText().toString());
+						etTextInput.getText().toString());
+				etTextInput.setText(null);
 			}
 		});
 	}
@@ -54,6 +59,16 @@ public class ConversationActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		boolean isDefaultSmsApp = SmsUtil.isDefaultSmsApp(this);
+
+		String hint = isDefaultSmsApp ? "대화 입력창" : "(기본 SMS 앱 설정필요)";
+		etTextInput.setHint(hint);
+		etTextInput.setEnabled(isDefaultSmsApp);
+
+		btSend.setEnabled(isDefaultSmsApp);
+
+		recyclerView.scrollToPosition(conversationList.size() - 1);
 	}
 
 }
