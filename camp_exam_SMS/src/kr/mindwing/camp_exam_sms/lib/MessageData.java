@@ -97,6 +97,14 @@ public class MessageData {
 		}
 	}
 
+	public static MessageData buildSentFromScratch(AddressInfo _addressInfo,
+			String _body, long _date) {
+		MessageData msgData = new MessageData(null, _addressInfo,
+				SmsUtil.MESSAGE_TYPE_SENT, _body, _date);
+
+		return msgData;
+	}
+
 	static MessageData buildFromDb(Context _ctx, Cursor _msgCursor) {
 		String address = _msgCursor.getString(_msgCursor
 				.getColumnIndex(ADDRESS));

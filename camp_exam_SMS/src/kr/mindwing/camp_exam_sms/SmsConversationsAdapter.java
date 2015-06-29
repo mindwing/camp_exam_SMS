@@ -2,7 +2,9 @@ package kr.mindwing.camp_exam_sms;
 
 import java.util.ArrayList;
 
+import kr.mindwing.camp_exam_sms.lib.AddressInfo;
 import kr.mindwing.camp_exam_sms.lib.MessageData;
+import kr.mindwing.camp_exam_sms.lib.SmsUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,4 +61,11 @@ public class SmsConversationsAdapter extends
 		return viewHolder;
 	}
 
+	public void notifyMessageAdded(AddressInfo addressInfo, String message) {
+		MessageData msgData = MessageData.buildSentFromScratch(addressInfo,
+				message, System.currentTimeMillis());
+
+		conversations.add(msgData);
+		notifyItemInserted(conversations.size() - 1);
+	}
 }

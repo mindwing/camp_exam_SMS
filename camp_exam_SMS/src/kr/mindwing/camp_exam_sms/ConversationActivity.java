@@ -19,6 +19,7 @@ public class ConversationActivity extends ActionBarActivity {
 	private AddressInfo addressInfo;
 	private RecyclerView recyclerView;
 	private ArrayList<MessageData> conversationList;
+	private SmsConversationsAdapter adapter;
 	private EditText etTextInput;
 	private TextView btSend;
 
@@ -36,7 +37,8 @@ public class ConversationActivity extends ActionBarActivity {
 		conversationList = SmsUtil.getConversation(this, addressInfo);
 
 		recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-		recyclerView.setAdapter(new SmsConversationsAdapter(conversationList));
+		recyclerView.setAdapter(adapter = new SmsConversationsAdapter(
+				conversationList));
 
 		RecyclerView.LayoutManager rvLayoutManager = new LinearLayoutManager(
 				this, LinearLayoutManager.VERTICAL, false);
@@ -49,9 +51,12 @@ public class ConversationActivity extends ActionBarActivity {
 
 			@Override
 			public void onClick(View v) {
-				SmsUtil.sendSms(ConversationActivity.this, addressInfo,
-						etTextInput.getText().toString());
+				String message = etTextInput.getText().toString();
+				SmsUtil.sendSms(ConversationActivity.this, addressInfo, message);
+
 				etTextInput.setText(null);
+				adapter.notifyMessageAdded(addressInfo, message);
+				recyclerView.scrollToPosition(adapter.getItemCount() - 1);
 			}
 		});
 	}
@@ -68,7 +73,7 @@ public class ConversationActivity extends ActionBarActivity {
 
 		btSend.setEnabled(isDefaultSmsApp);
 
-		recyclerView.scrollToPosition(conversationList.size() - 1);
+		recyclerView.scrollToPosition(adapter.getItemCount() - 1);
 	}
 
 }
