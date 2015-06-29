@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -45,6 +47,24 @@ public class ConversationActivity extends ActionBarActivity {
 		recyclerView.setLayoutManager(rvLayoutManager);
 
 		etTextInput = (EditText) findViewById(R.id.text_input);
+		etTextInput.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				btSend.setText(String.format("보내기\n(%d/140)", s.length()));
+			}
+		});
 
 		btSend = (TextView) findViewById(R.id.send);
 		btSend.setOnClickListener(new OnClickListener() {

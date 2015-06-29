@@ -31,7 +31,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/text_input"
         android:padding="0dp"
-        android:text="보내기"
+        android:text="보내기\n(0/140)"
         android:textColor="#0f0f0f"
         android:textStyle="bold" />
 
