@@ -10,23 +10,17 @@ public class SmsReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (intent.getAction().equals(
-				Telephony.Sms.Intents.WAP_PUSH_DELIVER_ACTION)) {
-			// MsgUtil.mmsDelivered(context, intent);
-		}
+		switch (intent.getAction()) {
+		case Telephony.Sms.Intents.SMS_DELIVER_ACTION:
+			SmsUtil.smsDelivered(context, intent);
+			break;
 
-		if (intent.getAction().equals(
-				Telephony.Sms.Intents.WAP_PUSH_RECEIVED_ACTION)) {
-			// MsgUtil.mmsReceived(intent);
-		}
+		case Telephony.Sms.Intents.SMS_RECEIVED_ACTION:
+			// ConversationActivity 가 Broadcast 를 처리해야 함.
+			break;
 
-		if (intent.getAction().equals(Telephony.Sms.Intents.SMS_DELIVER_ACTION)) {
-			// SmsUtil.smsDelivered(context, intent);
-		}
+		default:
 
-		if (intent.getAction()
-				.equals(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)) {
-			// SmsUtil.smsReceived(intent);
 		}
 	}
 }

@@ -16,8 +16,10 @@ import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.Telephony;
 import android.telephony.SmsManager;
+import android.telephony.SmsMessage;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SmsUtil {
 
@@ -401,5 +403,32 @@ public class SmsUtil {
 		value.put(BODY, body);
 
 		_ctx.getContentResolver().insert(CONTENT_URI_SMS, value);
+	}
+
+	public static void smsDelivered(Context context, Intent smsIntent) {
+		SmsMessage[] smsMessages = getMessagesFromIntent(smsIntent);
+
+		for (SmsMessage smsMessage : smsMessages) {
+			String address = smsMessage.getOriginatingAddress();
+			String body = smsMessage.getMessageBody();
+			long timestamp = smsMessage.getTimestampMillis();
+
+			AddressInfo addressInfo = new AddressInfo(context, address);
+			insertSmsToDb(context, addressInfo, body, timestamp, true, false);
+		}
+	}
+
+	private static SmsMessage[] getMessagesFromIntent(Intent intent) {
+		Object[] messages = (Object[]) intent.getSerializableExtra("pdus");
+
+		int pduCount = messages.length;
+		SmsMessage[] msgs = new SmsMessage[pduCount];
+
+		for (int i = 0; i < pduCount; i++) {
+			byte[] pdu = (byte[]) messages[i];
+			msgs[i] = SmsMessage.createFromPdu(pdu);
+		}
+
+		return msgs;
 	}
 }
