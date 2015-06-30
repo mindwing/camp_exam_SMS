@@ -361,8 +361,8 @@ public class SmsUtil {
 		}
 
 		try {
-			if (_text == null || _text.getBytes("KSC5601").length > 80) {
-				Log.d(TAG, "sendSms: _text length is longer than 80: " + _text);
+			if (_text == null || _text.getBytes("KSC5601").length > 140) {
+				Log.d(TAG, "sendSms: _text length is longer than 140: " + _text);
 
 				return false;
 			}

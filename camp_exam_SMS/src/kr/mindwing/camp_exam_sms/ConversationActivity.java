@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ConversationActivity extends ActionBarActivity {
 
@@ -72,11 +73,18 @@ public class ConversationActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				String message = etTextInput.getText().toString();
-				SmsUtil.sendSms(ConversationActivity.this, addressInfo, message);
+				boolean result = SmsUtil.sendSms(ConversationActivity.this,
+						addressInfo, message);
 
 				etTextInput.setText(null);
-				adapter.notifyMessageAdded(addressInfo, message);
-				recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+
+				if (result) {
+					adapter.notifyMessageAdded(addressInfo, message);
+					recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+				} else {
+					Toast.makeText(ConversationActivity.this,
+							"메시지를 보낼 수 없습니다.", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 	}
