@@ -4,14 +4,19 @@ import java.util.ArrayList;
 
 import kr.mindwing.camp_exam_sms.lib.ConversationInfo;
 import kr.mindwing.camp_exam_sms.lib.SmsUtil;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 
 public class ContactsListActivity extends ActionBarActivity {
 
 	private RecyclerView recyclerView;
+	private ImageView ball;
 	private ArrayList<ConversationInfo> conversationList;
 
 	@Override
@@ -30,11 +35,19 @@ public class ContactsListActivity extends ActionBarActivity {
 				this, LinearLayoutManager.VERTICAL, false);
 		recyclerView.setLayoutManager(rvLayoutManager);
 
-		SmsUtil.checkDefaultSmsApp(this);
+		ball = (ImageView) findViewById(R.id.ball);
+		ball.setOnClickListener(new OnClickListener() {
 
-		// AddressInfo addrInfo = conversationList.get(0).getAddressInfo();
-		// ArrayList<MessageData> messageList = SmsUtil.getConversation(
-		// ContactsListActivity.this, addrInfo);
+			@Override
+			public void onClick(View v) {
+				Intent compositionIntent = new Intent(
+						ContactsListActivity.this,
+						StartCompositionActivity.class);
+				startActivity(compositionIntent);
+			}
+		});
+
+		SmsUtil.checkDefaultSmsApp(this);
 	}
 
 	@Override

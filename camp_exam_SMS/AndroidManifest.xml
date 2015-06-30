@@ -41,6 +41,7 @@
         <activity
             android:name=".ConversationActivity"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".StartCompositionActivity" />
 
         <receiver
             android:name="kr.mindwing.camp_exam_sms.lib.MmsReceiver"
