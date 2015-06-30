@@ -6,7 +6,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import kr.mindwing.camp_exam_sms.ConversationActivity;
+import kr.mindwing.camp_exam_sms.R;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +25,6 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.widget.Toast;
 
 public class SmsUtil {
 
@@ -407,15 +412,50 @@ public class SmsUtil {
 
 	public static void smsDelivered(Context context, Intent smsIntent) {
 		SmsMessage[] smsMessages = getMessagesFromIntent(smsIntent);
+		AddressInfo addressInfo = null;
 
 		for (SmsMessage smsMessage : smsMessages) {
 			String address = smsMessage.getOriginatingAddress();
 			String body = smsMessage.getMessageBody();
 			long timestamp = smsMessage.getTimestampMillis();
 
-			AddressInfo addressInfo = new AddressInfo(context, address);
+			addressInfo = new AddressInfo(context, address);
 			insertSmsToDb(context, addressInfo, body, timestamp, true, false);
 		}
+
+		if (addressInfo != null) {
+			setNotification(context, smsMessages, addressInfo);
+		}
+	}
+
+	private static void setNotification(Context context,
+			SmsMessage[] smsMessages, AddressInfo addressInfo) {
+		NotificationManager notifyMgr = (NotificationManager) context
+				.getSystemService(Activity.NOTIFICATION_SERVICE);
+
+		SmsMessage msg = smsMessages[smsMessages.length - 1];
+
+		Notification notifyObj = new Notification(R.drawable.ic_launcher,
+				"[문자] " + addressInfo.getChainExpression(),
+				System.currentTimeMillis());
+
+		Intent receivedIntent = new Intent(context, ConversationActivity.class);
+		receivedIntent.putExtra(SmsUtil.THREAD_ID, addressInfo.getThreadId());
+		receivedIntent.putExtra(SmsUtil.ADDRESSES,
+				addressInfo.getSpaceSeparatedExpression());
+
+		PendingIntent i = PendingIntent.getActivity(context,
+				(int) System.currentTimeMillis(), receivedIntent, 0);
+
+		notifyObj.setLatestEventInfo(context, addressInfo.getChainExpression(),
+				msg.getMessageBody(), i);
+
+		notifyObj.number = 1;
+		notifyObj.defaults |= Notification.DEFAULT_VIBRATE;
+		notifyObj.defaults |= Notification.DEFAULT_SOUND;
+		notifyObj.flags |= Notification.FLAG_AUTO_CANCEL;
+
+		notifyMgr.notify(0, notifyObj);
 	}
 
 	private static SmsMessage[] getMessagesFromIntent(Intent intent) {
